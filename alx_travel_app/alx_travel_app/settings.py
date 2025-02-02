@@ -39,6 +39,15 @@ SECRET_KEY = 'django-insecure-r49m@7!zd=13gx-m-d!-ek6#g8!3f__xgxwh)63ijwb2r60u8y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CELERY_BROKER_URL = 'pyamqp://guest@localhost//'  # Broker URL for RabbitMQ
+
+CELERY_RESULT_BACKEND = 'rpc://'  # Backend URL for RabbitMQ
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+
+
 ALLOWED_HOSTS = []
 
 
@@ -146,3 +155,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Configure Django to send emails using Gmail
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
