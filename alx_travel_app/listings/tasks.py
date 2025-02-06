@@ -11,7 +11,7 @@ def booking_confirmation_email(booking_id):
     successfully created.
     """
     try:
-        booking = Booking.objects.get(id=booking_id)
+        booking = Booking.objects.get(booking_id=booking_id)
         subject = f'Booking Confirmation - {booking.booking_id}'
         message = (
                 f'Dear Customer,\n\n'
@@ -23,7 +23,7 @@ def booking_confirmation_email(booking_id):
                 f'Thank you for choosing us!\n'
             )
 
-        mail_sent = send_mail(subject, message, settings.EMAIL_HOST_USER, ['meshack3197@gmail.com'], fail_silently=False)
+        mail_sent = send_mail(subject, message, settings.EMAIL_HOST_USER, ['meshack1995@gmail.com'], fail_silently=False)
         
         return mail_sent
     

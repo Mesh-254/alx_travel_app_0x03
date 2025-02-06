@@ -17,7 +17,19 @@ class BookingViewSet(viewsets.ModelViewSet):
         Save the booking instance and trigger the email task.
         """
         instance = serializer.save()
-        booking_confirmation_email.delay(instance.booking_id) # Send email asynchronously
+
+        if instance.status == 'confirmed':
+            booking_confirmation_email.delay(instance.booking_id) # Send email asynchronously
+    
+    def perform_update(self, serializer):
+        """
+        Update the booking instance and trigger the email task.
+        """
+        instance = serializer.save()
+        if instance.status == 'confirmed':
+            booking_confirmation_email.delay(instance.booking_id)
+        
+            
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

@@ -5,10 +5,11 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'alx_travel_app.settings')
 
 
-app = Celery('alx_travel_app')
+app = Celery('alx_travel_app', broker='pyamqp://guest@localhost//', backend='rpc://')
 
 # Load task modules from all registered Django app configs
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Auto-discover tasks in installed apps
+# Explicitly auto-discover tasks
 app.autodiscover_tasks()
+
