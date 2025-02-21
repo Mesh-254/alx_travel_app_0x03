@@ -62,7 +62,7 @@ class BookingSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Booking
-        fields = ['booking_id', 'listing', 'start_date', 'end_date', 'status',
+        fields = ['booking_id', 'email', 'listing', 'start_date', 'end_date', 'status',
                   'created_at', 'updated_at']  # Serializes specific fields in the Booking model
 
     def create(self, validated_data):

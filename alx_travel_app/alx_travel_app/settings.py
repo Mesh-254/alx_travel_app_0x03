@@ -39,12 +39,9 @@ SECRET_KEY = 'django-insecure-r49m@7!zd=13gx-m-d!-ek6#g8!3f__xgxwh)63ijwb2r60u8y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CELERY_BROKER_URL = 'pyamqp://guest@localhost//'  # Broker URL for RabbitMQ
-
-CELERY_RESULT_BACKEND = 'rpc://'  # Backend URL for RabbitMQ
-
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
+# Celery settings
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
 
 
 

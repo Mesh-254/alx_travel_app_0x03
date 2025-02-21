@@ -1,7 +1,8 @@
 from .models import Listing, Booking, Review
 from .serializers import ListingSerializer, BookingSerializer, ReviewSerializer
 from rest_framework import viewsets
-from .tasks import booking_confirmation_email
+from .tasks import booking_confirmation_email, send_booking_email
+
 
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
@@ -18,9 +19,9 @@ class BookingViewSet(viewsets.ModelViewSet):
         """
         instance = serializer.save()
 
-        if instance.status == 'confirmed':
-            booking_confirmation_email.delay(instance.booking_id) # Send email asynchronously
-    
+        # Send email asynchronously
+        send_booking_email.delay(instance.booking_id)
+
     def perform_update(self, serializer):
         """
         Update the booking instance and trigger the email task.
@@ -28,8 +29,6 @@ class BookingViewSet(viewsets.ModelViewSet):
         instance = serializer.save()
         if instance.status == 'confirmed':
             booking_confirmation_email.delay(instance.booking_id)
-        
-            
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
