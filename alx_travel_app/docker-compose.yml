@@ -1,0 +1,73 @@
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    ports:
+      - "3307:3306"
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # References the MYSQL_ROOT_PASSWORD from .env
+      MYSQL_DATABASE: ${DB_NAME}                # References the MYSQL_DB from .env
+      MYSQL_USER: ${DB_USER}                  # References the MYSQL_USER from .env
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network  
+
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8001:8001"
+    depends_on: 
+      - db
+      - redis
+    networks:
+      - app-network
+    environment:
+      - DJANGO_SETTINGS_MODULE=alx_travel_app.settings
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8001"
+
+# celery worker
+  worker:
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=alx_travel_app.settings
+    command: celery -A alx_travel_app worker -l info
+    restart: always
+    networks:
+      - app-network
+
+
+
+networks:
+  app-network:
+
+volumes:
+  redis_data:
+  db_data:
