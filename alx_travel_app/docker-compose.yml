@@ -1,5 +1,6 @@
 services:
 
+# mysql database container
   db:
     image: mysql:8.0
     container_name: mysql_container
@@ -19,7 +20,7 @@ services:
     networks:
       - app-network  
 
-
+# redis server container
   redis:
     image: redis:alpine
     container_name: redis
@@ -31,7 +32,7 @@ services:
     networks:
       - app-network
 
-
+# our main application container
   web:
     build: .
     volumes:
