@@ -19,8 +19,16 @@ COPY . .
 
 
 # Expose the port the Django app runs on (default 8000)
-EXPOSE 8001
+# EXPOSE 8001
 
 
 # Define the command to run the application when the container starts
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]
+
+
+# run gunicorn 
+# CMD ["gunicorn","alx_travel_app.wsgi:application", "--bind", "0.0.0.0:8001", "--workers", "3"]
+
+
+# command to run server on heroku
+CMD gunicorn alx_travel_app.wsgi:application --bind 0.0.0.0:$PORT

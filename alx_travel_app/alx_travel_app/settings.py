@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ
 import os
+import dj_database_url
+
 
 # Initialize environment variables
 env = environ.Env(
@@ -45,7 +47,7 @@ CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -116,7 +118,8 @@ WSGI_APPLICATION = 'alx_travel_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  
+        # 'ENGINE': 'django.db.backends.mysql', 
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'), engine='django.db.backends.mysql'), 
         'NAME': env('DB_NAME'),  
         'USER': env('DB_USER'), 
         'PASSWORD': env('DB_PASSWORD'),  
@@ -160,7 +163,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
